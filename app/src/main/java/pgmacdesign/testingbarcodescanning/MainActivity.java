@@ -45,17 +45,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!PermissionUtilities.checkGrantedPermissions(MainActivity.this,
-                        new PermissionUtilities.permissionsEnum[]{
-                        PermissionUtilities.permissionsEnum.CAMERA})){
-                    PermissionUtilities.permissionsRequestShortcut(
-                            MainActivity.this, new PermissionUtilities.permissionsEnum[]{
-                                    PermissionUtilities.permissionsEnum.CAMERA});
-                } else {
-                    activity_main_frame_layout.setVisibility(View.VISIBLE);
-                    mCodeScanner.startPreview();
-                    isShowingScanner = true;
-                }
+                showScanner();
             }
         });
     }
@@ -94,6 +84,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void showScanner(){
+        if(!PermissionUtilities.checkGrantedPermissions(MainActivity.this,
+                new PermissionUtilities.permissionsEnum[]{
+                        PermissionUtilities.permissionsEnum.CAMERA})){
+            PermissionUtilities.permissionsRequestShortcut(
+                    MainActivity.this, new PermissionUtilities.permissionsEnum[]{
+                            PermissionUtilities.permissionsEnum.CAMERA});
+        } else {
+            activity_main_frame_layout.setVisibility(View.VISIBLE);
+            mCodeScanner.startPreview();
+            isShowingScanner = true;
+        }
+    }
+
     private void handleResult(com.google.zxing.Result result){
         L.m("result == " + new Gson().toJson(result, Result.class));
         Toast.makeText(MainActivity.this, result.getText(),
@@ -125,4 +129,12 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+
 }
